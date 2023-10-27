@@ -21,7 +21,7 @@ Route::post('sign-in', [AuthController::class, 'signIn'])->name('signIn');
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::post('sign-out', [AuthController::class, 'signOut'])->name('signOut');
-    Route::apiResource('manager', ManagerController::class)->names('managers');
-    Route::apiResource('test', TestController::class)->names('tests');
-    Route::post('test/{test}/rate', [TestController::class, 'rate'])->name('testRate');
+    Route::apiResource('managers', ManagerController::class)->names('managers');
+    Route::apiResource('tests', TestController::class)->names('tests');
+    Route::post('tests/{test}/rate', [TestController::class, 'rate'])->name('testRate');
 });

@@ -36,15 +36,12 @@ Copy `.env.example` to `.env` and set the following variables in the src and .do
 The following are used to set the container versions for the services. Here is an example configuration:
 - `PHP_VERSION=8.2-fpm-alpine`
 - `MYSQL_VERSION=8.1.0`
-- `REDIS_VERSION=latest`
 - `NGINX_VERSION=stable-alpine`
 
 #### Docker Services Exposed Ports
 The following are used to configure the exposed ports for the services. Here is an example, but update to de-conflict ports:
 - `HTTP_ON_HOST=8080`
 - `MYSQL_ON_HOST=3316`
-- `MYSQL_TEST_ON_HOST=3326`
-- `REDIS_ON_HOST=6379`
 
 #### Database Settings
 The following are used by docker when building the database service:
@@ -66,19 +63,132 @@ After that completes, run the following to install and compile the dependencies 
 - `docker-compose exec php sh`
 - `composer install`
 - `php artisan migrate`
-- 
-## Test
-To run the tests you need to run the following commands:
 
-- `php artisan --env=test config:cache`
-- `php artisan --env=test migrate:fresh`
-- `vendor/bin/phpunit ./tests/Feature/`
+## API Documentation
 
-After finishing the tests run the following command:
+This document provides information about the API endpoints and their functionality.
 
-- `php artisan config:cache`
+### Authentication
 
-## Queue
-To run queues
-- `php artisan queue:work`
-- `php artisan queue:work --queue=emails`
+To access the protected API routes, you need to authenticate using the `/sign-in` endpoint. You will receive an authentication token, which should be included in the `Authorization` header of your requests.
+
+#### Sign Up
+
+- **Endpoint**: `/sign-up`
+- **Method**: POST
+- **Description**: Sign up a new user.
+- **Request Body**: JSON with `name`, `email`, `password` fields.
+- **Response**: JSON with a success message and the newly created user's details.
+
+#### Sign In
+
+- **Endpoint**: `/sign-in`
+- **Method**: POST
+- **Description**: Sign in an existing user and receive an authentication token.
+- **Request Body**: JSON with `email` and `password` fields.
+- **Response**: JSON with an authentication token.
+
+#### Sign Out
+
+- **Endpoint**: `/sign-out`
+- **Method**: POST
+- **Description**: Sign out the currently authenticated user.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Response**: JSON with a success message.
+
+### Managers
+
+#### List Managers
+
+- **Endpoint**: `/managers`
+- **Method**: GET
+- **Description**: Get a list of all managers.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Response**: JSON with a list of manager details.
+
+#### Create Manager
+
+- **Endpoint**: `/managers`
+- **Method**: POST
+- **Description**: Create a new manager.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Request Body**: JSON with manager details (`name`, `email`, `password`).
+- **Response**: JSON with the newly created manager's details.
+
+#### View Manager
+
+- **Endpoint**: `/managers/{manager}`
+- **Method**: GET
+- **Description**: View details of a specific manager.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Response**: JSON with the manager's details.
+
+#### Update Manager
+
+- **Endpoint**: `/managers/{manager}`
+- **Method**: PUT
+- **Description**: Update details of a specific manager.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Request Body**: JSON with updated manager details (`name`, `email`, `password`).
+- **Response**: JSON with the updated manager's details.
+
+#### Delete Manager
+
+- **Endpoint**: `/managers/{manager}`
+- **Method**: DELETE
+- **Description**: Delete a specific manager.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Response**: JSON with a success message.
+
+### Tests
+
+#### List Tests
+
+- **Endpoint**: `/tests`
+- **Method**: GET
+- **Description**: Get a list of all tests.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Response**: JSON with a list of test details.
+
+#### Create Test
+
+- **Endpoint**: `/tests`
+- **Method**: POST
+- **Description**: Create a new test.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Request Body**: JSON with test details (`full_name`, `location`).
+- **Response**: JSON with the newly created test's details.
+
+#### View Test
+
+- **Endpoint**: `/tests/{test}`
+- **Method**: GET
+- **Description**: View details of a specific test.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Response**: JSON with the test's details.
+
+#### Update Test
+
+- **Endpoint**: `/tests/{test}`
+- **Method**: PUT
+- **Description**: Update details of a specific test.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Request Body**: JSON with updated test details (`full_name`, `location`).
+- **Response**: JSON with the updated test's details.
+
+#### Delete Test
+
+- **Endpoint**: `/tests/{test}`
+- **Method**: DELETE
+- **Description**: Delete a specific test.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Response**: JSON with a success message.
+
+#### Rate Test
+
+- **Endpoint**: `/tests/{test}/rate`
+- **Method**: POST
+- **Description**: Rate a specific test and update its criteria based on the score.
+- **Authorization**: Requires a valid token in the `Authorization` header.
+- **Request Body**: JSON with updated test details (`score`).
+- **Response**: JSON with the updated test's details.
