@@ -16,7 +16,7 @@ class ManagerController extends Controller
     public function __construct(
         private ManagerRepository $managerRepository
     ) {
-        $this->authorizeResource(User::class, Role::MANAGER);
+        $this->authorizeResource(User::class, 'manager');
     }
 
     public function index(): JsonResponse
